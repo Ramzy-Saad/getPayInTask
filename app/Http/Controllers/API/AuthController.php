@@ -60,16 +60,4 @@ class AuthController extends Controller
         $user_resource = new UserResource($request->user());
         return response()->json(['data'=>$user_resource]);
     }
-    public function update_profile(Request $request)
-    {
-        $validated_data = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:users,email,' . $request->user()->id,
-            ]);
-
-        $request->user()->update($validated_data);
-        return response()->json([
-            'data' => new UserResource($request->user())
-        ]);
-    }
 }
