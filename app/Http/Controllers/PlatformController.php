@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\Platform;
+use App\Services\PlatformService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PlatformController extends Controller
 {
+    protected $platformService;
+
+    public function __construct(PlatformService $platformService )
+    {
+        $this->platformService = $platformService;
+    }
+
     public function index(Request $request)
     {
-        $platforms = Platform::select('id', 'name', 'type')->get();
+        $platforms =  $this->platformService->index(); 
         return response()->json([
             'data' => $platforms,
         ]);
@@ -31,27 +39,9 @@ class PlatformController extends Controller
         $data = $request->validate([
             'platform_id' => 'required|exists:platforms,id',
         ]);
-
-        $user = Auth::user();
-
-        // 2. Determine current state
-        $existing = $user->platformUsers()->where('platform_id', $data['platform_id'])->first();
-
-        if ($existing) {
-            $existing->delete();
-
-            return response()->json([
-                'message' => 'Platform deactivated',
-            ]);
-        }
-
-        // Activate (create a new relation)
-        $user->platformUsers()->create([
-            'platform_id' => $data['platform_id'],
-        ]);
-
+        $message = $this->platformService->toggle($data['platform_id']);
         return response()->json([
-            'message' => 'Platform activated',
+            'message' => $message,
         ]);
     }
 }

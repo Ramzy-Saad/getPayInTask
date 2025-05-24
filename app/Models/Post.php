@@ -14,6 +14,9 @@ class Post extends Model
         'scheduled_time',
         'user_id',
     ];
+    protected $casts = [
+    'scheduled_time' => 'datetime',
+];
 
     public function platforms()
     {
