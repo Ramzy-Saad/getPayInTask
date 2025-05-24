@@ -68,7 +68,19 @@ class PostController extends Controller
     public function update(UpdatePost $request, Post $post)
     {
         $this->authorize('update', $post);
+        $user = Auth::user();
+        $userPlatformIds = $user->platformUsers()->pluck('platform_id')->toArray();
 
+        foreach ($request->platforms as $platformId) {
+            if (!in_array($platformId, $userPlatformIds)) {
+                return response()->json(
+                    [
+                        'message' => "Platform ID $platformId is not activated.",
+                    ],
+                    422,
+                );
+            }
+        }
         $data = $request->validated();
         $post = $this->postService->update($data, $post);
 
