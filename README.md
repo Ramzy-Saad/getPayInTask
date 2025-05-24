@@ -30,3 +30,31 @@ It allows users to:
    ```bash
    git clone https://github.com/your-username/your-repo-name.git
    cd your-repo-name
+2. **install PHP dependencies:**
+   composer install
+3. **Copy .env and generate key:**
+   cp .env.example .env
+    php artisan key:generate
+4. **CConfigure your .env with database and other settings.**
+5. **Run migrations and seeders:**
+    php artisan migrate --seed
+
+6. **Install and compile frontend assets:**
+    npm install
+    npm run dev
+7. **Start Laravel server:**
+    php artisan serve
+8. **Access the app:**
+    Blade UI: http://localhost:8000
+    API Base: http://localhost:8000/api
+
+
+** Authentication **
+    API uses Laravel Sanctum.
+    Use POST /api/register and POST /api/login for user registration and login.
+    Include Bearer token in API requests for authentication.
+
+** Postman Collection **
+    Located in postManCollection/
+    Import SocialMediaScheduler.postman_collection.json into Postman.
+    Set base URL: http://localhost:8000/api
