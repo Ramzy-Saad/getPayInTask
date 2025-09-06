@@ -1,19 +1,27 @@
+name: Node.js CI
+
 on:
   push:
     branches:
-      # branches trigger on pushing
       - main
   pull_request:
-      # branches trigger on pulling
     branches:
       - main
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps: 
-      -  name: Checkout code
-         uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
          
-      -  name: Run  test
-         run: npm test
-  
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20  # or 20 if you prefer latest LTS
+
+      - name: Install dependencies
+        run: npm install
+         
+      - name: Run tests
+        run: npm test
